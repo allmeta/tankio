@@ -30,32 +30,29 @@ const key = {
   RIGHT: 68,
   DOWN: 83,
 
-  isDown: (keyCode) => {
-    return this._pressed[keyCode] ? 1 : 0
-  },
-
-  onKeydown: (event) => {
-    this._pressed[event.keyCode] = true
-  },
-
-  onKeyup: (event) => {
-    delete this._pressed[event.keyCode]
-  }
-}
 const init = () => {
-  game.camera.position.set(width / 2, height / 2, 100)
-  game.renderer.setSize(width, height)
-  document.body.appendChild(game.renderer.domElement)
+  with (game) {
+    camera.position.set(width / 2, height / 2, 100)
+    renderer.setSize(width, height)
+    document.body.appendChild(renderer.domElement)
   scene.background = new THREE.Color(0x0a0e14)
+  }
 
   //listeners
-  window.addEventListener("keyup", (event) => key.onKeyup(event), false)
-  window.addEventListener("keydown", (event) => key.onKeydown(event), false)
+  window.addEventListener("keyup", (event) => key.onKeyUp(event), false)
+  window.addEventListener("keydown", (event) => key.onKeyDown(event), false)
 
+  //register
+  socket.emit("name", "kms")
   update()
 }
+
 const update = () => {
-  game.players.forEach((x) => x.update())
+  with (game) {
+    players.forEach((x) => x.update())
+    renderer.render(scene, camera)
+  }
+  window.requestAnimationFrame(update)
 }
 
 window.addEventListener("load", init)
