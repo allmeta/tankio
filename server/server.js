@@ -20,19 +20,25 @@ io.on("connection", (socket) => {
     socket.emit("currentPlayers", players)
   })
 
-  socket.on("move", ({ x, y }) =>
-    socket.broadcast.emit("playerMove", {
-      id: socket.id,
-      x: (players[socket.id].x = x),
-      y: (players[socket.id].y = y)
-    })
+  socket.on(
+    "move",
+    ({ x, y }) =>
+      socket.id in players &&
+      socket.broadcast.emit("playerMove", {
+        id: socket.id,
+        x: (players[socket.id].x = x),
+        y: (players[socket.id].y = y)
+      })
   )
 
-  socket.on("rotate", (r) =>
-    socket.broadcast.emit("playerRotate", {
-      id: socket.id,
-      r: (players[socket.id].r = r)
-    })
+  socket.on(
+    "rotate",
+    (r) =>
+      socket.id in players &&
+      socket.broadcast.emit("playerRotate", {
+        id: socket.id,
+        r: (players[socket.id].r = r)
+      })
   )
 })
 
