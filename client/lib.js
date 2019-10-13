@@ -112,6 +112,7 @@ export const addPlayer = (player) => {
   p.main.add(p.tank)
   p.main.add(p.turret)
   game.scene.add(p.main)
+  game.scene.add(p.hpbar)
 
   // align turret in group
   p.turret.position.set(
