@@ -10,6 +10,7 @@ export class Player {
     speed,
     size,
     shootspeed,
+    bullets,
     id,
     hp
   }) {
@@ -35,18 +36,36 @@ export class Player {
     this.bullets = bullets
     this.shootspeed = shootspeed
     this.size = size
+    this.hp = hp
   }
   update() {
+    this.r = Math.atan2(game.my - game.height / 2, game.mx - game.width / 2)
+    this.move()
     this.x += this.vx
     this.y += this.vy
+    game.camera.position.x = this.main.position.x
+    game.camera.position.y = this.main.position.y
   }
-  draw() {}
-  move() {}
+  draw() {
+    this.main.rotation.z = this.r
+    this.main.position.set(this.x, this.y, 0)
+
+    this.hpbar.position.set(this.x, this.y - this.size - 20, 0)
+    this.hpbar.scale.x = this.hp / 100
+    this.hpbar.material.color.set(`hsl(${this.hp},69%,54%)`)
+  }
+  move() {
+    let m = (key.isDown(key.UP) - key.isDown(key.DOWN)) * this.speed
+    this.vy = Math.sin(this.r) * m
+    this.vx = Math.cos(this.r) * m
+  }
 }
 export const game = {
   players: {},
   width: window.innerWidth,
   height: window.innerHeight,
+  mx: 0,
+  my: 0,
   scene: new THREE.Scene(),
   camera: new THREE.OrthographicCamera(
     window.innerWidth / -2,
@@ -92,10 +111,19 @@ export const addPlayer = (player) => {
   let p = new Player(player)
   p.main.add(p.tank)
   p.main.add(p.turret)
-  p.main.add(p.hpbar)
   game.scene.add(p.main)
 
-  game.players[player.id] = p
+  // align turret in group
+  p.turret.position.set(
+    p.x + Math.cos(p.r) * p.size,
+    p.y + Math.sin(p.r) * p.size,
+    0
+  )
+  p.turret.rotation.z = p.main.rotation.z = p.tank.rotation.z =
+    p.r - Math.PI / 2
+
+  game.players[p.id] = p
+  console.log(p.id)
 }
 
 export const socket = io()
