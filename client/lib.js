@@ -109,19 +109,15 @@ export const key = {
 
 export const addPlayer = (player) => {
   let p = new Player(player)
+  // align turret in group
+  p.turret.rotation.z = p.main.rotation.z = p.tank.rotation.z =
+    p.r - Math.PI / 2
+  p.turret.position.set(Math.cos(p.r) * p.size, Math.sin(p.r) * p.size, 0)
+  //add to scene
   p.main.add(p.tank)
   p.main.add(p.turret)
   game.scene.add(p.main)
   game.scene.add(p.hpbar)
-
-  // align turret in group
-  p.turret.position.set(
-    p.x + Math.cos(p.r) * p.size,
-    p.y + Math.sin(p.r) * p.size,
-    0
-  )
-  p.turret.rotation.z = p.main.rotation.z = p.tank.rotation.z =
-    p.r - Math.PI / 2
 
   game.players[p.id] = p
   console.log(p.id)
