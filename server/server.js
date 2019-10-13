@@ -45,7 +45,8 @@ const createPlayer = (name, id) =>
     shootspeed: 20,
     bullets: {},
     size: 25,
-    cooldown: true
+    cooldown: true,
+    hp: 100
   })
 
 http.listen(3000, () => console.log("listening on *:3000"))
