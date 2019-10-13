@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
 
   socket.on(
     "rotate",
-    (r) =>
+    ({ r }) =>
       socket.id in players &&
       socket.broadcast.emit("playerRotate", {
         id: socket.id,
