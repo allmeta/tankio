@@ -10,16 +10,21 @@ app.get("/", (req, res) =>
 const players = {}
 
 io.on("connection", (socket) => {
+  socket.on("disconnect", () => {
+    io.emit("playerDisconnect", socket.id)
+    delete players[socket.id]
+  })
+
   socket.on("name", (name) => {
     socket.broadcast.emit("newPlayer", createPlayer(name, socket.id))
     socket.emit("currentPlayers", players)
   })
 
-  socket.on("move", (mov) =>
+  socket.on("move", ({ x, y }) =>
     socket.broadcast.emit("playerMove", {
       id: socket.id,
-      x: (players[socket.id].x = mov.x),
-      y: (players[socket.id].y = mov.y)
+      x: (players[socket.id].x = x),
+      y: (players[socket.id].y = y)
     })
   )
 
