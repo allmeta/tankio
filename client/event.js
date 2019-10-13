@@ -14,4 +14,8 @@ socket.on("playerRotate", ({ id, r }) => {
   game.players[id].r = r
 })
 // socket.on("playerBullet")
-socket.on("playerDisconnect", (id) => delete game.players[id])
+socket.on("playerDisconnect", (id) => {
+  game.scene.remove(game.players[id].main)
+  game.scene.remove(game.players[id].hpbar)
+  delete game.players[id]
+})
