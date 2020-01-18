@@ -15,6 +15,10 @@ io.on("connection", (socket) => {
     delete players[socket.id]
   })
 
+  socket.on("msg", msg => {
+    io.emit('msg', msg)
+  })
+
   socket.on("name", (name) => {
     socket.broadcast.emit("newPlayer", createPlayer(name, socket.id))
     socket.emit("currentPlayers", players)

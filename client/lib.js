@@ -124,3 +124,18 @@ export const addPlayer = (player) => {
 }
 
 export const socket = io()
+
+export const addMsg = msg => {
+  let a=document.createElement('li')
+  a.textContent=msg
+  document.getElementById('msg').appendChild(a)
+}
+
+export const sendMsg = event => {
+  event.stopPropagation()
+  let inp = document.getElementById('msgin').value
+  if (event.keyCode == 13 && inp) {
+    socket.emit('msg', inp)
+    document.getElementById('msgin').value = ""
+  }
+}

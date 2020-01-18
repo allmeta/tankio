@@ -1,4 +1,4 @@
-import { addPlayer, game, socket } from "./lib.js"
+import { addPlayer, game, socket,addMsg } from "./lib.js"
 
 socket.on("newPlayer", (player) => addPlayer(player))
 socket.on("currentPlayers", (players) =>
@@ -19,3 +19,4 @@ socket.on("playerDisconnect", (id) => {
   game.scene.remove(game.players[id].hpbar)
   delete game.players[id]
 })
+socket.on('msg',msg=>addMsg(msg))
